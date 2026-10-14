@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>秋檅麥 | 酒陪伴你歲歲年年 - 尊榮威士忌品牌</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;600;700;900&family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        amber: {
+                            50: '#fffbeb',
+                            100: '#fef3c7',
+                            300: '#fcd34d',
+                            500: '#f59e0b',
+                            600: '#d97706',
+                            700: '#b45309',
+                            800: '#92400e',
+                            900: '#78350f',
+                            950: '#451a03',
+                        },
+                        gold: {
+                            light: '#F4E0A5',
+                            DEFAULT: '#D4AF37',
+                            dark: '#AA820A',
+                            glow: 'rgba(212, 175, 55, 0.35)'
+                        },
+                        oak: {
+                            900: '#1a0d06',
+                            950: '#0d0603'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['"Noto Serif TC"', 'serif'],
+                        cinzel: ['"Cinzel"', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom CSS & Animation Styles -->
+    <style>
+        body {
+            font-family: 'Noto Serif TC', serif;
+            background-color: #0b0705;
+            color: #e5e5e5;
+            overflow-x: hidden;
+        }
+
+        /* Glassmorphism utility */
+        .glass-card {
+            background: rgba(26, 15, 10, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(212, 175, 55, 0.15);
+        }
+
+        .glass-nav {
+            background: rgba(13, 6, 3, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        /* Golden Gradient Text */
+        .gold-text-gradient {
+            background: linear-gradient(135deg, #FFF1CA 0%, #D4AF37 50%, #9A7B1C 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* ANIMATION EFFECT 1: Fade In & Focus (Blurs into sharpness while fading in) */
+        .anim-fade-focus {
+            animation: fadeInFocus 2.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes fadeInFocus {
+            0% {
+                opacity: 0;
+                filter: blur(18px);
+                transform: scale(1.08);
+            }
+            100% {
+                opacity: 1;
+                filter: blur(0px);
+                transform: scale(1);
+            }
+        }
+
+        /* NEW ANIMATION: Character-by-Character Stylized Bounce & Rotation for Brand Title */
+        .title-char {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(35px) rotate(-12deg) scale(0.6);
+            filter: blur(6px);
+            animation: charEnter 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        @keyframes charEnter {
+            0% {
+                opacity: 0;
+                transform: translateY(35px) rotate(-12deg) scale(0.6);
+                filter: blur(6px);
+            }
+            70% {
+                transform: translateY(-6px) rotate(2deg) scale(1.05);
+                filter: blur(0px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) rotate(0deg) scale(1);
+                filter: blur(0px);
+            }
+        }
+
+        /* ANIMATION EFFECT 2: Shutter Mask Reveal (Left to Right clip-path reveal) */
+
+        .anim-mask-reveal {
+            clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
+            animation: maskReveal 2s cubic-bezier(0.77, 0, 0.175, 1) 0.8s forwards;
+        }
+
+        @keyframes maskReveal {
+            0% {
+                clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
+            }
+            100% {
+                clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+            }
+        }
+
+        /* ANIMATION EFFECT 3: Bouncy Character Pop-in */
+        .char-pop {
+            display: inline-block;
+            opacity: 0;
+            transform: scale(0.2) translateY(20px);
+            animation: popIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        @keyframes popIn {
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        /* Parallax Background Canvas Container */
+        #particleCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Custom Hover CTA Button Geometry Transition */
+        .btn-cta-custom {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .perspective-container {
+            perspective: 1000px;
+        }
+
+        .title-3d-char {
+            display: inline-block;
+            opacity: 0;
+            transform-style: preserve-3d;
+            transform: rotateX(-75deg) rotateY(25deg) translateZ(-60px) scale(0.7);
+            text-shadow: 
+                0 1px 0 #92400e,
+                0 2px 0 #78350f,
+                0 4px 0 #451a03,
+                0 6px 12px rgba(0, 0, 0, 0.8),
+                0 0 25px rgba(212, 175, 55, 0.4);
+            animation: flipIn3D 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            transition: transform 0.4s ease;
+        }
+
+        .title-3d-char:hover {
+            transform: translateY(-8px) rotateX(15deg) scale(1.08);
+            text-shadow: 
+                0 2px 0 #b45309,
+                0 4px 0 #78350f,
+                0 8px 0 #451a03,
+                0 12px 20px rgba(0, 0, 0, 0.9),
+                0 0 35px rgba(212, 175, 55, 0.7);
+        }
+
+        @keyframes flipIn3D {
+            0% {
+                opacity: 0;
+                transform: rotateX(-75deg) rotateY(25deg) translateZ(-60px) scale(0.7);
+                filter: blur(8px);
+            }
+            60% {
+                opacity: 1;
+                transform: rotateX(12deg) rotateY(-4deg) translateZ(10px) scale(1.05);
+                filter: blur(0px);
+            }
+            100% {
+                opacity: 1;
+                transform: rotateX(0deg) rotateY(0deg) translateZ(0) scale(1);
+                filter: blur(0px);
+            }
+        }
+
+        .btn-cta-custom .btn-bg {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, #D4AF37 0%, #b45309 100%);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+        .btn-cta-custom:hover .btn-bg {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+        .btn-cta-custom:hover .arrow-icon {
+            transform: translateX(6px) rotate(-45deg);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0d0603;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #451a03;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #D4AF37;
+        }
+    </style>
+</head>
+<body class="relative">
+
+    <header class="fixed top-0 left-0 w-full z-50 glass-nav transition-all duration-300" id="mainHeader">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+            <!-- Brand Logo -->
+            <a href="#home" class="flex items-center space-x-3 group">
+                <div class="w-10 h-10 rounded-full border border-gold/50 flex items-center justify-center bg-amber-950/50 group-hover:border-gold transition-colors">
+                    <span class="text-gold font-bold text-xl font-cinzel">秋</span>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-xl font-bold tracking-widest text-gold-light group-hover:text-gold transition-colors">秋檅麥</span>
+                    <span class="text-[9px] tracking-widest text-amber-200/60 uppercase font-cinzel">Autumn Golden Malt</span>
+                </div>
+            </a>
+
+            <!-- Desktop Nav Links -->
+            <nav class="hidden md:flex items-center space-x-8 text-sm tracking-widest font-light text-gray-300">
+                <a href="#home" class="hover:text-gold transition-colors py-1 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1px] after:bg-gold hover:after:w-full after:transition-all">首頁 Home</a>
+                <a href="#story" class="hover:text-gold transition-colors py-1 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1px] after:bg-gold hover:after:w-full after:transition-all">品牌故事 Story</a>
+                <a href="#philosophy" class="hover:text-gold transition-colors py-1 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1px] after:bg-gold hover:after:w-full after:transition-all">核心價值 Value</a>
+                <a href="#products" class="hover:text-gold transition-colors py-1 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1px] after:bg-gold hover:after:w-full after:transition-all">威士忌系列 Products</a>
+                <a href="#service" class="hover:text-gold transition-colors py-1 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1px] after:bg-gold hover:after:w-full after:transition-all">尊榮服務 Service</a>
+                <a href="#contact" class="hover:text-gold transition-colors py-1 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1px] after:bg-gold hover:after:w-full after:transition-all">預約聯絡 Contact</a>
+            </nav>
+
+            <!-- CTA Right Nav -->
+            <div class="hidden md:block">
+                <a href="#products" class="btn-cta-custom border border-gold/60 text-gold hover:text-black px-5 py-2.5 rounded-full text-xs font-semibold tracking-wider flex items-center space-x-2">
+                    <span class="btn-bg"></span>
+                    <span class="relative z-10">預訂典藏威士忌</span>
+                    <i class="fa-solid fa-arrow-right text-xs relative z-10 transition-transform duration-300 arrow-icon"></i>
+                </a>
+            </div>
+
+            <!-- Mobile Hamburger Button -->
+            <button id="mobileMenuBtn" class="md:hidden text-gold focus:outline-none p-2" aria-label="Open Menu">
+                <i class="fa-solid fa-bars text-xl"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Drawer Menu -->
+        <div id="mobileMenu" class="hidden md:hidden bg-oak-950/95 border-b border-gold/20 px-6 py-6 space-y-4">
+            <a href="#home" class="block text-gray-200 hover:text-gold tracking-widest text-sm">首頁 Home</a>
+            <a href="#story" class="block text-gray-200 hover:text-gold tracking-widest text-sm">品牌故事 Story</a>
+            <a href="#philosophy" class="block text-gray-200 hover:text-gold tracking-widest text-sm">核心價值 Value</a>
+            <a href="#products" class="block text-gray-200 hover:text-gold tracking-widest text-sm">威士忌系列 Products</a>
+            <a href="#service" class="block text-gray-200 hover:text-gold tracking-widest text-sm">尊榮服務 Service</a>
+            <a href="#contact" class="block text-gray-200 hover:text-gold tracking-widest text-sm">預約聯絡 Contact</a>
+        </div>
+    </header>
+
+    <section id="home" class="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+        <!-- Floating Particle Canvas (Amber & Golden Flakes) -->
+        <canvas id="particleCanvas"></canvas>
+
+        <!-- Dynamic Parallax Ambient Background Image -->
+        <div id="heroBg" class="absolute inset-0 bg-cover bg-center opacity-40 scale-105 transition-transform duration-75 ease-out" style="background-image: url('https://images.unsplash.com/photo-1527281400683-1aae777175f8?q=80&w=1920&auto=format&fit=crop');"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-[#0b0705] via-[#0b0705]/60 to-transparent"></div>
+        <div class="absolute inset-0 bg-gradient-to-r from-[#0b0705] via-transparent to-[#0b0705]"></div>
+
+        <div class="relative z-10 max-w-5xl mx-auto px-6 text-center py-16">
+            <!-- Subtitle Badge -->
+            <div class="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full border border-gold/30 bg-amber-950/40 text-gold text-xs tracking-[0.25em] mb-8">
+                <i class="fa-solid fa-whiskey-glass text-gold/80 text-xs"></i>
+                <span>極致工藝 ‧ 金黃麥浪</span>
+            </div>
+
+            <div class="perspective-container mb-6">
+                <h1 class="text-5xl md:text-7xl lg:text-8xl font-black text-gold-text-gradient tracking-[0.25em] flex justify-center items-center space-x-3 cursor-default" id="brandTitleHeading">
+                    <span class="title-3d-char" style="animation-delay: 0.15s;">秋</span>
+                    <span class="title-3d-char" style="animation-delay: 0.45s;">檅</span>
+                    <span class="title-3d-char" style="animation-delay: 0.75s;">麥</span>
+                </h1>
+            </div>
+
+            <!-- TEXT ANIMATION EFFECT 2: Shutter Mask Reveal -->
+            <div class="inline-block overflow-hidden mb-8">
+                <p class="text-xl md:text-3xl font-light text-amber-100/90 tracking-[0.3em] leading-relaxed anim-mask-reveal">
+                    酒陪伴你歲歲年年
+                </p>
+            </div>
+
+            <!-- TEXT ANIMATION EFFECT 3: Bouncy Character Pop-in -->
+            <div class="text-sm md:text-lg text-gray-300 font-light tracking-widest mb-12 h-8 flex justify-center items-center space-x-1" id="charContainer">
+                <!-- Dynamically populated via JS for staggered bounce effect -->
+            </div>
+
+            <!-- Hero Action Buttons -->
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-5">
+                <a href="#story" class="btn-cta-custom w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-amber-700 to-gold text-black font-bold text-sm tracking-widest rounded-full shadow-lg shadow-amber-900/40 flex items-center justify-center space-x-3 group">
+                    <span class="btn-bg"></span>
+                    <span class="relative z-10 text-amber-950 font-black">探索幸福故事</span>
+                    <i class="fa-solid fa-arrow-down relative z-10 text-amber-950 transition-transform duration-300 arrow-icon"></i>
+                </a>
+                <a href="#products" class="w-full sm:w-auto px-8 py-4 border border-gold/40 hover:border-gold text-gold-light hover:text-gold font-medium text-sm tracking-widest rounded-full transition-all duration-300 bg-oak-950/40 hover:bg-amber-950/30 backdrop-blur-sm text-center">
+                    品鑑經典酒款
+                </a>
+            </div>
+        </div>
+
+        <!-- Scroll Indicator Arrow -->
+        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10 text-gold/60 animate-bounce">
+            <a href="#story" aria-label="Scroll Down">
+                <i class="fa-solid fa-chevron-down text-xl"></i>
+            </a>
+        </div>
+    </section>
+
+    <section id="story" class="relative py-32 bg-gradient-to-b from-[#0b0705] via-oak-900 to-[#0b0705] overflow-hidden">
+        <!-- Parallax Light Sphere background -->
+        <div class="absolute top-1/4 left-10 w-96 h-96 bg-amber-600/10 rounded-full filter blur-[120px] pointer-events-none"></div>
+        <div class="absolute bottom-1/4 right-10 w-96 h-96 bg-gold/10 rounded-full filter blur-[120px] pointer-events-none"></div>
+
+        <div class="max-w-6xl mx-auto px-6 relative z-10">
+            <!-- Section Header -->
+            <div class="text-center mb-20">
+                <span class="text-gold text-xs tracking-[0.4em] uppercase font-cinzel block mb-3">BRAND STORY & ORIGIN</span>
+                <h2 class="text-3xl md:text-5xl font-bold text-gold-text-gradient tracking-widest">微醺起源 ‧ 一口幸福</h2>
+                <div class="w-16 h-[2px] bg-gold/40 mx-auto mt-4"></div>
+            </div>
+
+            <!-- Story Timeline Steps (Reveal on Scroll) -->
+            <div class="space-y-24 relative before:absolute before:inset-0 before:left-1/2 before:-translate-x-1/2 before:w-[1px] before:bg-gradient-to-b before:from-transparent before:via-gold/30 before:to-transparent hidden md:block"></div>
+
+            <div class="space-y-16 md:space-y-24">
+                <!-- Story Beat 1 -->
+                <div class="story-card flex flex-col md:flex-row items-center gap-8 md:gap-16 opacity-0 translate-y-12 transition-all duration-1000">
+                    <div class="w-full md:w-1/2 text-right md:text-right text-center space-y-4">
+                        <span class="text-amber-500 font-cinzel text-sm tracking-widest">CHAPTER 01</span>
+                        <h3 class="text-2xl font-bold text-amber-100">秋天午後的低谷</h3>
+                        <p class="text-gray-400 font-light leading-relaxed">
+                            那是一個涼意初顯的秋天午後，風裡夾雜着落葉的微香。心情沉重的他踱步在街頭，生活與工作的疲憊如厚重的陰霾籠罩心頭，急需一個能讓靈魂暫時停靠的港灣。
+                        </p>
+                    </div>
+                    <div class="w-full md:w-1/2">
+                        <div class="relative rounded-2xl overflow-hidden border border-gold/20 shadow-2xl group">
+                            <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=800&auto=format&fit=crop" alt="Autumn Street" class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-700">
+                            <div class="absolute inset-0 bg-amber-950/30"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Story Beat 2 -->
+                <div class="story-card flex flex-col md:flex-row-reverse items-center gap-8 md:gap-16 opacity-0 translate-y-12 transition-all duration-1000">
+                    <div class="w-full md:w-1/2 text-left space-y-4 text-center md:text-left">
+                        <span class="text-amber-500 font-cinzel text-sm tracking-widest">CHAPTER 02</span>
+                        <h3 class="text-2xl font-bold text-amber-100">超商角落的一眼相中</h3>
+                        <p class="text-gray-400 font-light leading-relaxed">
+                            走進路角那家明亮卻安靜的便利商店，貨架深處那一瓶散發著金黃溫潤光澤的「秋檅麥」靜靜佇立。沒有張揚的繁複，只有沉穩而優雅的琥珀感，讓他不由自主地伸手買下。
+                        </p>
+                    </div>
+                    <div class="w-full md:w-1/2">
+                        <div class="relative rounded-2xl overflow-hidden border border-gold/20 shadow-2xl group">
+                            <img src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&w=800&auto=format&fit=crop" alt="Whiskey Bottle" class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-700">
+                            <div class="absolute inset-0 bg-amber-950/20"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Story Beat 3 -->
+                <div class="story-card flex flex-col md:flex-row items-center gap-8 md:gap-16 opacity-0 translate-y-12 transition-all duration-1000">
+                    <div class="w-full md:w-1/2 text-right space-y-4 text-center md:text-right">
+                        <span class="text-amber-500 font-cinzel text-sm tracking-widest">CHAPTER 03</span>
+                        <h3 class="text-2xl font-bold text-amber-100">第一口的溫暖幸福</h3>
+                        <p class="text-gray-400 font-light leading-relaxed">
+                            輕抿一口，濃郁的大麥甜香與橡木桶柔和的香草味在舌尖綻放。溫熱感順著喉嚨緩緩流淌，身心的緊繃與疲憊瞬間瓦解，取而代之的是一種發自內心的安寧與好幸福。
+                        </p>
+                    </div>
+                    <div class="w-full md:w-1/2">
+                        <div class="relative rounded-2xl overflow-hidden border border-gold/20 shadow-2xl group">
+                            <img src="https://images.unsplash.com/photo-1527281400683-1aae777175f8?q=80&w=800&auto=format&fit=crop" alt="Pouring Whiskey" class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-700">
+                            <div class="absolute inset-0 bg-amber-950/20"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="philosophy" class="py-28 bg-[#0d0704] relative border-t border-b border-gold/10">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <span class="text-gold text-xs tracking-[0.4em] uppercase font-cinzel block mb-3">BRAND PHILOSOPHY & VALUES</span>
+                <h2 class="text-3xl md:text-5xl font-bold text-gold-text-gradient tracking-widest">核心價值 ‧ 幸福承諾</h2>
+                <p class="text-gray-400 text-sm mt-3 tracking-widest">秋檅麥是為大家存在的幸福品牌，依靠酒來溝通，讓人身心舒暢</p>
+            </div>
+
+            <!-- Responsive Hover Interactive Value Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Card 1 -->
+                <div class="philosophy-card glass-card p-8 rounded-2xl border border-gold/15 hover:border-gold transition-all duration-500 transform hover:-translate-y-2 group cursor-pointer">
+                    <div class="w-14 h-14 rounded-xl bg-amber-950/80 border border-gold/30 flex items-center justify-center text-gold text-2xl mb-6 group-hover:scale-110 group-hover:bg-gold group-hover:text-black transition-all">
+                        <i class="fa-solid fa-heart"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-amber-100 group-hover:text-gold transition-colors duration-300 mb-3 flex items-center justify-between">
+                        <span>帶來幸福</span>
+                        <i class="fa-solid fa-sparkles text-xs opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                    </h3>
+                    <p class="text-sm text-gray-400 group-hover:text-amber-100 transition-colors duration-300 leading-relaxed">
+                        我們相信，一杯好酒不僅是味蕾的饗宴，更是撫平情緒、點亮日常幸福感的心靈處方。
+                    </p>
+                    <div class="mt-4 pt-4 border-t border-gold/10 text-xs text-gold/80 font-light opacity-0 max-h-0 group-hover:opacity-100 group-hover:max-h-20 transition-all duration-500 overflow-hidden">
+                        每一滴秋檅麥，都醞釀著溫暖與陪伴，為每個低谷時刻注入光芒。
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="philosophy-card glass-card p-8 rounded-2xl border border-gold/15 hover:border-gold transition-all duration-500 transform hover:-translate-y-2 group cursor-pointer">
+                    <div class="w-14 h-14 rounded-xl bg-amber-950/80 border border-gold/30 flex items-center justify-center text-gold text-2xl mb-6 group-hover:scale-110 group-hover:bg-gold group-hover:text-black transition-all">
+                        <i class="fa-solid fa-comments"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-amber-100 group-hover:text-gold transition-colors duration-300 mb-3 flex items-center justify-between">
+                        <span>以酒溝通</span>
+                        <i class="fa-solid fa-sparkles text-xs opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                    </h3>
+                    <p class="text-sm text-gray-400 group-hover:text-amber-100 transition-colors duration-300 leading-relaxed">
+                        言語有時受限，但酒香能無聲傳情。無論與好友共飲或獨自斟品，皆能打開沉靜的對話。
+                    </p>
+                    <div class="mt-4 pt-4 border-t border-gold/10 text-xs text-gold/80 font-light opacity-0 max-h-0 group-hover:opacity-100 group-hover:max-h-20 transition-all duration-500 overflow-hidden">
+                        打破心靈藩籬，透過琥珀色的酒體，拉近人與人之間最真摯的距離。
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="philosophy-card glass-card p-8 rounded-2xl border border-gold/15 hover:border-gold transition-all duration-500 transform hover:-translate-y-2 group cursor-pointer">
+                    <div class="w-14 h-14 rounded-xl bg-amber-950/80 border border-gold/30 flex items-center justify-center text-gold text-2xl mb-6 group-hover:scale-110 group-hover:bg-gold group-hover:text-black transition-all">
+                        <i class="fa-solid fa-spa"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-amber-100 group-hover:text-gold transition-colors duration-300 mb-3 flex items-center justify-between">
+                        <span>身心舒暢</span>
+                        <i class="fa-solid fa-sparkles text-xs opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                    </h3>
+                    <p class="text-sm text-gray-400 group-hover:text-amber-100 transition-colors duration-300 leading-relaxed">
+                        嚴選純淨單一麥芽與清澈甘泉，經過歲月淬鍊，帶來順口圓潤、毫無負擔的放鬆感受。
+                    </p>
+                    <div class="mt-4 pt-4 border-t border-gold/10 text-xs text-gold/80 font-light opacity-0 max-h-0 group-hover:opacity-100 group-hover:max-h-20 transition-all duration-500 overflow-hidden">
+                        讓緊繃的筋肉與思緒在麥芽甜香中舒緩，回歸最自然舒暢的狀態。
+                    </div>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="philosophy-card glass-card p-8 rounded-2xl border border-gold/15 hover:border-gold transition-all duration-500 transform hover:-translate-y-2 group cursor-pointer">
+                    <div class="w-14 h-14 rounded-xl bg-amber-950/80 border border-gold/30 flex items-center justify-center text-gold text-2xl mb-6 group-hover:scale-110 group-hover:bg-gold group-hover:text-black transition-all">
+                        <i class="fa-solid fa-hourglass-half"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-amber-100 group-hover:text-gold transition-colors duration-300 mb-3 flex items-center justify-between">
+                        <span>歲歲年年</span>
+                        <i class="fa-solid fa-sparkles text-xs opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                    </h3>
+                    <p class="text-sm text-gray-400 group-hover:text-amber-100 transition-colors duration-300 leading-relaxed">
+                        陪伴你經歷人生每個重要時刻。從青澀到成熟，秋檅麥永遠是您忠實的時光證人。
+                    </p>
+                    <div class="mt-4 pt-4 border-t border-gold/10 text-xs text-gold/80 font-light opacity-0 max-h-0 group-hover:opacity-100 group-hover:max-h-20 transition-all duration-500 overflow-hidden">
+                        歲月沉澱酒香，時光鑄就珍藏，願這份微醺相伴每個春夏秋冬。
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="products" class="py-32 bg-[#0b0705] relative">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-20">
+                <span class="text-gold text-xs tracking-[0.4em] uppercase font-cinzel block mb-3">WHISKEY SELECTION</span>
+                <h2 class="text-3xl md:text-5xl font-bold text-gold-text-gradient tracking-widest">秋檅麥 ‧ 經典威士忌系列</h2>
+                <p class="text-gray-400 text-sm mt-3 tracking-widest">精心挑選橡木桶熟成，呈獻無與倫比的風土風味</p>
+            </div>
+
+            <!-- Product Cards Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                <!-- Product 1 -->
+                <div class="glass-card rounded-3xl overflow-hidden border border-gold/20 hover:border-gold transition-all duration-500 group flex flex-col justify-between">
+                    <div>
+                        <div class="relative h-80 overflow-hidden bg-gradient-to-b from-amber-950/40 to-oak-900/80 flex items-center justify-center p-6">
+                            <span class="absolute top-4 left-4 text-[10px] uppercase font-cinzel tracking-widest px-3 py-1 bg-amber-950/80 border border-gold/30 text-gold rounded-full">雙桶工藝</span>
+                            <img src="https://images.unsplash.com/photo-1527281400683-1aae777175f8?q=80&w=600&auto=format&fit=crop" alt="經典秋檅雙桶威士忌" class="h-64 object-contain group-hover:scale-110 transition-transform duration-700 filter drop-shadow-[0_15px_15px_rgba(0,0,0,0.7)]">
+                        </div>
+                        <div class="p-8 space-y-4">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs text-gold font-cinzel tracking-wider">ABV 43% | 700ml</span>
+                                <div class="flex text-gold text-xs space-x-1">
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                </div>
+                            </div>
+                            <h3 class="text-2xl font-bold text-amber-100 group-hover:text-gold transition-colors">經典秋檅雙桶威士忌</h3>
+                            <p class="text-xs text-gray-400 leading-relaxed font-light">
+                                波本桶與波特桶交織的雙重韻味。前調帶有金黃大麥與烤太妃糖甜香，後韻綿長，最適合日常微醺放鬆。
+                            </p>
+                            <div class="space-y-2 pt-2 border-t border-gold/10 text-xs text-amber-200/80">
+                                <div class="flex justify-between"><span>風味筆記:</span><span class="text-gray-300">香草、金黃大麥、蜂蜜</span></div>
+                                <div class="flex justify-between"><span>熟成橡木:</span><span class="text-gray-300">美國白橡木 + 波特桶</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-8 pt-0 flex items-center justify-between">
+                        <span class="text-2xl font-bold text-gold font-cinzel">NT$ 2,280</span>
+                        <a href="#contact" class="btn-cta-custom px-5 py-2.5 border border-gold/50 text-gold hover:text-black rounded-full text-xs font-semibold tracking-wider flex items-center space-x-2">
+                            <span class="btn-bg"></span>
+                            <span class="relative z-10">立即預訂</span>
+                            <i class="fa-solid fa-arrow-right text-xs relative z-10 transition-transform duration-300 arrow-icon"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Product 2 -->
+                <div class="glass-card rounded-3xl overflow-hidden border border-gold/20 hover:border-gold transition-all duration-500 group flex flex-col justify-between relative transform md:-translate-y-4">
+                    <div class="absolute top-0 right-0 bg-gold text-black text-[10px] font-bold px-4 py-1.5 rounded-bl-2xl uppercase tracking-widest shadow-lg">
+                        人氣首選
+                    </div>
+                    <div>
+                        <div class="relative h-80 overflow-hidden bg-gradient-to-b from-amber-950/40 to-oak-900/80 flex items-center justify-center p-6">
+                            <span class="absolute top-4 left-4 text-[10px] uppercase font-cinzel tracking-widest px-3 py-1 bg-amber-950/80 border border-gold/30 text-gold rounded-full">雪莉桶特選</span>
+                            <img src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&w=600&auto=format&fit=crop" alt="歲歲年年雪莉桶特選" class="h-64 object-contain group-hover:scale-110 transition-transform duration-700 filter drop-shadow-[0_15px_15px_rgba(0,0,0,0.7)]">
+                        </div>
+                        <div class="p-8 space-y-4">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs text-gold font-cinzel tracking-wider">ABV 46% | 700ml</span>
+                                <div class="flex text-gold text-xs space-x-1">
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                </div>
+                            </div>
+                            <h3 class="text-2xl font-bold text-amber-100 group-hover:text-gold transition-colors">歲歲年年雪莉桶特選</h3>
+                            <p class="text-xs text-gray-400 leading-relaxed font-light">
+                                全全程西班牙雪莉桶熟成。富含葡萄乾、黑巧克力與秋果醇香，口感深邃豐潤，象徵歲月沉澱的深厚情誼。
+                            </p>
+                            <div class="space-y-2 pt-2 border-t border-gold/10 text-xs text-amber-200/80">
+                                <div class="flex justify-between"><span>風味筆記:</span><span class="text-gray-300">黑巧克力、果干、肉桂</span></div>
+                                <div class="flex justify-between"><span>熟成橡木:</span><span class="text-gray-300">赫雷斯雪莉桶</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-8 pt-0 flex items-center justify-between">
+                        <span class="text-2xl font-bold text-gold font-cinzel">NT$ 3,680</span>
+                        <a href="#contact" class="btn-cta-custom px-5 py-2.5 border border-gold/50 text-gold hover:text-black rounded-full text-xs font-semibold tracking-wider flex items-center space-x-2">
+                            <span class="btn-bg"></span>
+                            <span class="relative z-10">立即預訂</span>
+                            <i class="fa-solid fa-arrow-right text-xs relative z-10 transition-transform duration-300 arrow-icon"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Product 3 -->
+                <div class="glass-card rounded-3xl overflow-hidden border border-gold/20 hover:border-gold transition-all duration-500 group flex flex-col justify-between">
+                    <div>
+                        <div class="relative h-80 overflow-hidden bg-gradient-to-b from-amber-950/40 to-oak-900/80 flex items-center justify-center p-6">
+                            <span class="absolute top-4 left-4 text-[10px] uppercase font-cinzel tracking-widest px-3 py-1 bg-amber-950/80 border border-gold/30 text-gold rounded-full">高年份尊榮</span>
+                            <img src="https://images.unsplash.com/photo-1569529465841-dfecdab7503b?q=80&w=600&auto=format&fit=crop" alt="琥珀秋楓高年份單麥" class="h-64 object-contain group-hover:scale-110 transition-transform duration-700 filter drop-shadow-[0_15px_15px_rgba(0,0,0,0.7)]">
+                        </div>
+                        <div class="p-8 space-y-4">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs text-gold font-cinzel tracking-wider">ABV 48.5% | 700ml</span>
+                                <div class="flex text-gold text-xs space-x-1">
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star font-light text-gold/40"></i>
+                                </div>
+                            </div>
+                            <h3 class="text-2xl font-bold text-amber-100 group-hover:text-gold transition-colors">琥珀秋楓高年份單麥</h3>
+                            <p class="text-xs text-gray-400 leading-relaxed font-light">
+                                歷經18年歲月靜置，入口帶著煙燻泥煤與微苦焦糖的細致層次。限量發售，專為品味頂級的威士忌鑑賞家打造。
+                            </p>
+                            <div class="space-y-2 pt-2 border-t border-gold/10 text-xs text-amber-200/80">
+                                <div class="flex justify-between"><span>風味筆記:</span><span class="text-gray-300">檀香、老皮革、焦糖</span></div>
+                                <div class="flex justify-between"><span>熟成橡木:</span><span class="text-gray-300">高年份橡木原桶</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-8 pt-0 flex items-center justify-between">
+                        <span class="text-2xl font-bold text-gold font-cinzel">NT$ 6,800</span>
+                        <a href="#contact" class="btn-cta-custom px-5 py-2.5 border border-gold/50 text-gold hover:text-black rounded-full text-xs font-semibold tracking-wider flex items-center space-x-2">
+                            <span class="btn-bg"></span>
+                            <span class="relative z-10">立即預訂</span>
+                            <i class="fa-solid fa-arrow-right text-xs relative z-10 transition-transform duration-300 arrow-icon"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="service" class="py-28 bg-gradient-to-r from-oak-950 via-amber-950/40 to-oak-950 relative border-t border-gold/10">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div class="space-y-6">
+                    <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full border border-gold/30 bg-gold/10 text-gold text-xs tracking-widest">
+                        <i class="fa-solid fa-truck-ramp-box"></i>
+                        <span>EXCLUSIVE SERVICE</span>
+                    </div>
+                    <h2 class="text-3xl md:text-5xl font-bold text-amber-100 leading-tight">
+                        尊榮酒水服務 <br>
+                        <span class="text-gold-text-gradient">上門到府寄送與品酒說明</span>
+                    </h2>
+                    <p class="text-gray-300 text-sm font-light leading-relaxed">
+                        秋檅麥不只是一瓶酒，更是一份無微不至的溫暖服務。我們提供專人到府安全配送、精緻包裝說明，並可預約高級品酒師上門進行專業風土講析與搭餐建議。
+                    </p>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
+                        <div class="p-4 rounded-xl bg-oak-900/60 border border-gold/10 flex items-start space-x-3">
+                            <i class="fa-solid fa-house-chimney-user text-gold text-xl mt-1"></i>
+                            <div>
+                                <h4 class="text-sm font-bold text-amber-100">到府溫控配送</h4>
+                                <p class="text-xs text-gray-400 mt-1">全程恆溫恆濕配送，確保最佳風味狀態落地。</p>
+                            </div>
+                        </div>
+                        <div class="p-4 rounded-xl bg-oak-900/60 border border-gold/10 flex items-start space-x-3">
+                            <i class="fa-solid fa-glass-water-droplet text-gold text-xl mt-1"></i>
+                            <div>
+                                <h4 class="text-sm font-bold text-amber-100">品酒師到府解說</h4>
+                                <p class="text-xs text-gray-400 mt-1">專人為您與貴賓講述釀造工藝與風味輪引導。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-4">
+                        <a href="#contact" class="btn-cta-custom inline-flex items-center space-x-3 px-8 py-4 bg-gold text-black rounded-full font-bold text-sm tracking-widest">
+                            <span class="btn-bg"></span>
+                            <span class="relative z-10">預約專人上門服務</span>
+                            <i class="fa-solid fa-arrow-right relative z-10 transition-transform duration-300 arrow-icon"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Visual Gallery Card -->
+                <div class="relative">
+                    <div class="relative rounded-3xl overflow-hidden border border-gold/30 shadow-2xl glass-card p-3">
+                        <img src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?q=80&w=800&auto=format&fit=crop" alt="Sommelier Service" class="w-full h-96 object-cover rounded-2xl">
+                        <div class="absolute inset-0 bg-gradient-to-t from-oak-950 via-transparent to-transparent"></div>
+                        <div class="absolute bottom-8 left-8 right-8 text-amber-100">
+                            <p class="text-xs font-cinzel tracking-widest text-gold mb-1">VIP SOMMELIER SERVICE</p>
+                            <h3 class="text-xl font-bold">讓尊榮品酒體驗，延續至您的私密餐桌</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="py-32 bg-[#0b0705] relative">
+        <div class="max-w-5xl mx-auto px-6">
+            <div class="glass-card rounded-3xl p-8 md:p-16 border border-gold/30 relative overflow-hidden text-center">
+                <!-- Background Ambient Glow -->
+                <div class="absolute -top-24 -right-24 w-80 h-80 bg-gold/10 rounded-full filter blur-3xl pointer-events-none"></div>
+
+                <span class="text-gold text-xs tracking-[0.4em] uppercase font-cinzel block mb-3">GET IN TOUCH</span>
+                <h2 class="text-3xl md:text-5xl font-bold text-gold-text-gradient tracking-widest mb-6">開啟您的幸福微醺之旅</h2>
+                <p class="text-gray-300 text-sm max-w-2xl mx-auto font-light leading-relaxed mb-12">
+                    留下您的聯絡資訊，將有秋檅麥專人為您安排品鑑配送或解答疑問。酒陪伴你歲歲年年，讓我們為您送上溫暖。
+                </p>
+
+                <!-- Interactive Form -->
+                <form id="contactForm" onsubmit="handleFormSubmit(event)" class="max-w-xl mx-auto space-y-5 text-left">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                        <div>
+                            <label class="block text-xs text-gold/80 mb-2 tracking-wider">貴賓姓名 Name</label>
+                            <input type="text" required placeholder="請輸入姓名" class="w-full bg-oak-950/80 border border-gold/20 rounded-xl px-4 py-3 text-sm text-gray-200 focus:outline-none focus:border-gold transition-colors">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-gold/80 mb-2 tracking-wider">聯絡電話 Phone</label>
+                            <input type="tel" required placeholder="請輸入電話" class="w-full bg-oak-950/80 border border-gold/20 rounded-xl px-4 py-3 text-sm text-gray-200 focus:outline-none focus:border-gold transition-colors">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gold/80 mb-2 tracking-wider">需求項目 Demand</label>
+                        <select class="w-full bg-oak-950/80 border border-gold/20 rounded-xl px-4 py-3 text-sm text-gray-200 focus:outline-none focus:border-gold transition-colors">
+                            <option value="buy">購買威士忌產品</option>
+                            <option value="home_service">預約到府配送與品酒說明</option>
+                            <option value="corporate">企業禮贈合作</option>
+                            <option value="other">其他諮詢</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gold/80 mb-2 tracking-wider">留言備註 Message</label>
+                        <textarea rows="3" placeholder="請填寫您的具體需求或希望送達時間..." class="w-full bg-oak-950/80 border border-gold/20 rounded-xl px-4 py-3 text-sm text-gray-200 focus:outline-none focus:border-gold transition-colors"></textarea>
+                    </div>
+
+                    <!-- Prominent Interactive CTA Button with Dynamic Transformations -->
+                    <div class="pt-4 text-center">
+                        <button type="submit" class="btn-cta-custom w-full py-4 bg-gradient-to-r from-gold via-amber-500 to-gold text-black font-black text-sm tracking-widest rounded-xl shadow-xl shadow-amber-900/30 flex items-center justify-center space-x-3 group cursor-pointer">
+                            <span class="btn-bg"></span>
+                            <span class="relative z-10">送出預約申請 ‧ 領取幸福服務</span>
+                            <i class="fa-solid fa-paper-plane relative z-10 transition-transform duration-300 arrow-icon"></i>
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Feedback Toast Message Box (No alert) -->
+                <div id="toastMsg" class="hidden mt-6 p-4 rounded-xl bg-amber-950/90 border border-gold text-gold text-sm transition-all duration-300">
+                    <i class="fa-solid fa-circle-check mr-2"></i>
+                    感謝您的預約！秋檅麥專人將於 24 小時內與您聯繫，為您遞送溫暖與幸福。
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="py-12 bg-oak-950 border-t border-gold/15 text-gray-400 text-xs">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 rounded-full border border-gold/50 flex items-center justify-center bg-amber-950">
+                    <span class="text-gold font-bold text-sm">秋</span>
+                </div>
+                <span class="text-gold-light font-bold tracking-widest text-sm">秋檅麥 Autumn Golden Malt</span>
+            </div>
+            <p class="tracking-widest text-center">酒陪伴你歲歲年年 ‧ 給大家帶來幸福的威士忌品牌</p>
+            <p class="text-gray-500">© 2026 秋檅麥 Autumn Golden Malt Whiskey. All Rights Reserved.</p>
+        </div>
+        <div class="mt-6 text-center text-[10px] text-amber-500/60 uppercase tracking-widest">
+            禁止酒駕 ‧ 未滿十八歲禁止飲酒 ‧ 飲酒過量有害健康
+        </div>
+    </footer>
+
+    <script>
+        // 1. Text Animation Effect 3: Bouncy Character Pop-in Setup
+        const phrase = "帶來幸福 ‧ 身心舒暢 ‧ 陪伴你歲歲年年";
+        const charContainer = document.getElementById('charContainer');
+
+        if (charContainer) {
+            phrase.split('').forEach((char, index) => {
+                const span = document.createElement('span');
+                span.textContent = char === ' ' ? '\u00A0' : char;
+                span.className = 'char-pop text-amber-200/90 font-light';
+                span.style.animationDelay = `${1.2 + index * 0.08}s`;
+                charContainer.appendChild(span);
+            });
+        }
+
+        // 2. Parallax Canvas Particle System (Golden Barley & Amber Dust)
+        const canvas = document.getElementById('particleCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2.5 + 0.5;
+                this.speedY = - (Math.random() * 0.4 + 0.1);
+                this.speedX = Math.random() * 0.3 - 0.15;
+                this.opacity = Math.random() * 0.6 + 0.2;
+            }
+            update() {
+                this.y += this.speedY;
+                this.x += this.speedX;
+                if (this.y < 0) this.reset();
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(212, 175, 55, ${this.opacity})`;
+                ctx.shadowBlur = 8;
+                ctx.shadowColor = '#D4AF37';
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < 45; i++) {
+            particles.push(new Particle());
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        // 3. Parallax Scroll Effect for Hero Background & Story Cards Reveal
+        const heroBg = document.getElementById('heroBg');
+        const storyCards = document.querySelectorAll('.story-card');
+
+        window.addEventListener('scroll', () => {
+            const scrolled = window.scrollY;
+
+            // Hero Parallax Background Movement
+            if (heroBg && scrolled < window.innerHeight) {
+                heroBg.style.transform = `scale(1.05) translateY(${scrolled * 0.35}px)`;
+            }
+
+            // Scroll Reveal for Story Cards
+            storyCards.forEach(card => {
+                const rect = card.getBoundingClientRect();
+                if (rect.top < window.innerHeight * 0.82) {
+                    card.classList.remove('opacity-0', 'translate-y-12');
+                    card.classList.add('opacity-100', 'translate-y-0');
+                }
+            });
+        });
+
+        // Trigger initial check for story cards on page load
+        window.dispatchEvent(new Event('scroll'));
+
+        // 4. Mobile Nav Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Close mobile menu on link click
+        document.querySelectorAll('#mobileMenu a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // 5. Contact Form Submission (Message box feedback instead of alert)
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            const toast = document.getElementById('toastMsg');
+            toast.classList.remove('hidden');
+            e.target.reset();
+
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
